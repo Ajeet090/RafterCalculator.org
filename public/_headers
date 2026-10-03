@@ -1,0 +1,5 @@
+# Cloudflare Pages Custom Response Headers
+# Prevents Google and search engines from indexing the .pages.dev preview URL to avoid duplicate content penalties
+
+https://raftercalculator-org.pages.dev/*
+  X-Robots-Tag: noindex
