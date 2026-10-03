@@ -4,6 +4,8 @@ Interactive Rafter Calculator web application built with Astro, Tailwind CSS, an
 
 ## 🚀 Project Structure
 
+ Live Website Link: www.raftercalculator.org
+ 
 Inside of your Astro project, you'll see the following folders and files:
 
 ```text
