@@ -145,7 +145,7 @@
   }
 </style>
 
-<script is:inline>
+<script>
   (function() {
     const estUnitSel = document.getElementById('est-unit-selector');
     const inputBuildingLength = document.getElementById('est-building-length');
@@ -327,8 +327,18 @@
       });
     }
 
-    // Initial calculation
-    updateEstUnitLabels();
-    calculateMaterials();
+    // Initial calculation safely deferred to prevent forced synchronous reflow
+    function init() {
+      requestAnimationFrame(() => {
+        updateEstUnitLabels();
+        calculateMaterials();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 </script>
