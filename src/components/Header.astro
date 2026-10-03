@@ -1,0 +1,70 @@
+---
+---
+<header class="no-print" style="background-color: var(--color-canvas); border-bottom: 1px solid var(--color-hairline); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); background-color: rgba(250, 250, 250, 0.9);">
+  <div class="container-custom" style="display: flex; align-items: center; justify-content: space-between; height: 64px;">
+    <!-- Logo -->
+    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-ink);">
+      <div style="width: 32px; height: 32px; background-color: var(--color-ink); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: #ffffff;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18"/>
+          <path d="M5 21V10l7-7 7 7v11"/>
+          <path d="M9 21v-6h6v6"/>
+          <path d="M12 3v18"/>
+        </svg>
+      </div>
+      <div>
+        <span style="font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; display: block; line-height: 1.1;">Rafter Calculator</span>
+        <span class="mono-eyebrow" style="font-size: 0.65rem; color: var(--color-mute); display: block; margin-top: 1px;">Raftercalculator.org</span>
+      </div>
+    </a>
+
+    <!-- Nav Links (Desktop) -->
+    <nav style="display: flex; align-items: center; gap: 4px;" class="desktop-nav">
+      <a href="/#calculator" class="nav-item">Calculator</a>
+      <a href="/#visualizer" class="nav-item">2D Schematic</a>
+      <a href="/#estimator" class="nav-item">Materials</a>
+      <a href="/#guide" class="nav-item">Guide & FAQ</a>
+      <a href="/about" class="nav-item">About</a>
+      <a href="/contact" class="nav-item">Contact</a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button onclick="window.print()" class="geist-btn-secondary geist-btn-sm" title="Print Job-site Rafter Spec Sheet">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        <span>Print Spec</span>
+      </button>
+
+      <a href="#calculator" class="geist-btn-primary geist-btn-sm">
+        <span>Start Framing</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav-item {
+    color: var(--color-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+  
+  .nav-item:hover {
+    background-color: var(--color-hairline-soft);
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none !important;
+    }
+  }
+</style>

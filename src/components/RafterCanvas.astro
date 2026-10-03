@@ -1,0 +1,68 @@
+---
+---
+<div class="geist-card" style="display: flex; flex-direction: column; height: 100%; min-height: 480px; position: relative;" id="visualizer">
+  <!-- Canvas Controls Bar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--color-hairline); margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="mono-eyebrow" style="margin: 0; color: var(--color-ink);">2D Vector Preview</span>
+      <span class="geist-badge" id="canvas-view-badge">Full Schematic</span>
+    </div>
+
+    <!-- View Mode Switcher -->
+    <div class="geist-pill-toggle" id="canvas-view-toggle">
+      <button type="button" class="geist-pill-btn active" data-view="full">Full Roof</button>
+      <button type="button" class="geist-pill-btn" data-view="birdsmouth">Birdsmouth Notch</button>
+      <button type="button" class="geist-pill-btn" data-view="cutlist">Cut Diagram</button>
+    </div>
+  </div>
+
+  <!-- SVG Rendering Area -->
+  <div style="flex: 1; background-color: #0f172a; border-radius: var(--radius-sm); border: 1px solid #1e293b; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 380px;" id="canvas-container">
+    
+    <!-- Blueprint Grid Lines Pattern overlay -->
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 16px 16px; opacity: 0.6; pointer-events: none;"></div>
+
+    <!-- Live Dynamic SVG -->
+    <svg id="rafter-svg" viewBox="0 0 800 500" width="100%" height="100%" style="width: 100%; height: 100%; max-height: 480px;" preserveAspectRatio="xMidYMid meet">
+      <!-- Defs for arrow markers and blueprint styling -->
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+        </marker>
+        <marker id="arrow-white" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#e2e8f0"/>
+        </marker>
+        <pattern id="wood-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="10" y2="10" stroke="#334155" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+
+      <!-- SVG Content will be rendered dynamically by JS -->
+      <g id="svg-graphic-group"></g>
+    </svg>
+
+    <!-- Canvas Floating Overlay Controls -->
+    <div style="position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px;" class="no-print">
+      <button type="button" id="btn-reset-view" class="geist-btn-secondary geist-btn-sm" style="background: rgba(15, 23, 42, 0.85); color: #ffffff; border-color: #334155;" title="Reset View Zoom">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span>Reset</span>
+      </button>
+      <button type="button" id="btn-download-svg" class="geist-btn-secondary geist-btn-sm" style="background: rgba(15, 23, 42, 0.85); color: #ffffff; border-color: #334155;" title="Download SVG Schematic">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>SVG</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Legend / Key Bar -->
+  <div style="display: flex; items-center; justify-content: space-between; margin-top: 12px; font-size: 0.75rem; color: var(--color-mute); flex-wrap: wrap; gap: 8px;">
+    <div style="display: flex; gap: 16px;">
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background-color: #0070f3; border-radius: 2px; display: inline-block;"></span> Rafter Board</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background-color: #f5a623; border-radius: 2px; display: inline-block;"></span> Birdsmouth Notch</span>
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background-color: #64748b; border-radius: 2px; display: inline-block;"></span> Wall Plate / Ridge</span>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #94a3b8;">
+      Scale: Real-time Dynamic Vector
+    </div>
+  </div>
+</div>

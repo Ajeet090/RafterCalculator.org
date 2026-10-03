@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = "404 - Page Not Found | Rafter Calculator";
+const pageDescription = "The page you are looking for could not be found on Rafter Calculator. Return to our free rafter length calculator and framing tools.";
+const canonicalUrl = "https://raftercalculator.org/404";
+---
+
+<Layout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <Header />
+
+  <main style="background-color: var(--color-canvas); min-height: 75vh; display: flex; align-items: center; justify-content: center; padding: 4rem 0;">
+    <div class="container-custom" style="max-width: 640px; text-align: center;">
+      
+      <!-- 404 Badge -->
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: var(--color-ink); color: #ffffff; border-radius: var(--radius-md); font-family: var(--font-mono); font-weight: 700; font-size: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        404
+      </div>
+
+      <h1 style="font-size: 2.25rem; font-weight: 700; color: var(--color-ink); letter-spacing: -0.03em; margin-bottom: 0.75rem;">
+        Page Not Found
+      </h1>
+
+      <p style="font-size: 1rem; color: var(--color-body); line-height: 1.6; margin-bottom: 2rem;">
+        Sorry, the page or document you are looking for has been moved, renamed, or does not exist on Rafter Calculator.
+      </p>
+
+      <!-- Quick Action Buttons -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 2.5rem;">
+        <a href="/" class="geist-btn-primary geist-btn-md">
+          <span>Go to Rafter Calculator</span>
+        </a>
+        <a href="/contact" class="geist-btn-secondary geist-btn-md">
+          <span>Contact Support</span>
+        </a>
+      </div>
+
+      <!-- Quick Link Grid -->
+      <div class="geist-card" style="padding: 1.5rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md); text-align: left;">
+        <div style="font-weight: 600; font-size: 0.875rem; color: var(--color-ink); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.04em;" class="mono-eyebrow">
+          Popular Rafter Tools & Pages
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 0.875rem;">
+          <a href="/#calculator" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            ⚡ Rafter Length Calculator
+          </a>
+          <a href="/#visualizer" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            📐 2D Vector Schematic
+          </a>
+          <a href="/#estimator" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            📦 Material Lumber Takeoff
+          </a>
+          <a href="/#guide" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            📖 Framing Guide & Formulas
+          </a>
+          <a href="/about" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            ℹ️ About Rafter Calculator
+          </a>
+          <a href="/privacy" style="color: var(--color-body); text-decoration: none; padding: 6px 10px; border-radius: 4px; background: var(--color-canvas); border: 1px solid var(--color-hairline);" class="hover-item">
+            🔒 Privacy Policy
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

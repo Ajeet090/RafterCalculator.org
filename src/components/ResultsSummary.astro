@@ -1,0 +1,119 @@
+---
+---
+<div class="geist-card" style="margin-top: 1.5rem;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-hairline); padding-bottom: 0.75rem; flex-wrap: wrap; gap: 8px;">
+    <div>
+      <span class="mono-eyebrow" style="margin: 0;">Calculated Output Summary</span>
+      <h3 class="heading-md" style="margin-top: 2px;">Rafter & Cut Specifications</h3>
+    </div>
+    <div style="display: flex; gap: 8px;" class="no-print">
+      <button type="button" id="btn-copy-summary" class="geist-btn-primary geist-btn-sm" title="Copy Framing Spec Block to Clipboard">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span id="copy-btn-text">Copy Results</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Key Primary Highlight Cards -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 1.5rem;">
+    <!-- Total Rafter Length (Main Primary Result) -->
+    <div style="background-color: var(--color-hairline-soft); border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem; position: relative;">
+      <span class="body-sm" style="font-weight: 500; color: var(--color-body); text-transform: uppercase; letter-spacing: 0.04em;">Total Rafter Length</span>
+      <div id="res-total-length" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-accent); line-height: 1.2; margin-top: 4px;">--</div>
+      <div id="res-total-length-secondary" style="font-size: 0.8125rem; font-family: var(--font-mono); color: var(--color-mute); margin-top: 2px;">Includes Overhang</div>
+    </div>
+
+    <!-- Standard Rafter Length (Ridge to Wall) -->
+    <div style="background-color: var(--color-hairline-soft); border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <span class="body-sm" style="font-weight: 500; color: var(--color-body); text-transform: uppercase; letter-spacing: 0.04em;">Standard Rafter Length</span>
+      <div id="res-standard-length" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); line-height: 1.2; margin-top: 4px;">--</div>
+      <div style="font-size: 0.8125rem; font-family: var(--font-mono); color: var(--color-mute); margin-top: 2px;">Ridge to Wall Plate</div>
+    </div>
+
+    <!-- Total Rise -->
+    <div style="background-color: var(--color-hairline-soft); border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <span class="body-sm" style="font-weight: 500; color: var(--color-body); text-transform: uppercase; letter-spacing: 0.04em;">Calculated Total Rise</span>
+      <div id="res-total-rise" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); line-height: 1.2; margin-top: 4px;">--</div>
+      <div id="res-rise-secondary" style="font-size: 0.8125rem; font-family: var(--font-mono); color: var(--color-mute); margin-top: 2px;">Vertical Peak Height</div>
+    </div>
+
+    <!-- Pitch Angle / Slope -->
+    <div style="background-color: var(--color-hairline-soft); border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <span class="body-sm" style="font-weight: 500; color: var(--color-body); text-transform: uppercase; letter-spacing: 0.04em;">Plumb Cut Angle</span>
+      <div id="res-pitch-angle" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); line-height: 1.2; margin-top: 4px;">--</div>
+      <div id="res-seat-angle" style="font-size: 0.8125rem; font-family: var(--font-mono); color: var(--color-mute); margin-top: 2px;">Seat Cut Angle: --</div>
+    </div>
+  </div>
+
+  <!-- Detailed Cut & Dimension Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+    <!-- Column 1: Birdsmouth Notch Details -->
+    <div style="border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-ink); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+        <span>Birdsmouth Notch Cuts</span>
+        <span class="geist-badge" style="background-color: #fff7ed; color: #c2410c;">Seat Cut</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Seat Cut Width (Plate)</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-seat-width">--</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Plumb Notch Depth</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-plumb-notch">--</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: var(--color-ink); font-weight: 600;">HAP (Height Above Plate)</td>
+          <td style="padding: 6px 0; font-weight: 700; font-family: var(--font-mono); color: var(--color-accent); text-align: right;" id="res-hap">--</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Column 2: Pitch & Geometry Metrics -->
+    <div style="border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-ink); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+        <span>Geometry & Slope Metrics</span>
+        <span class="geist-badge" style="background-color: #f0fdf4; color: #15803d;">Angles</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Effective Run</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-effective-run">--</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Pitch Multiplier / Ratio</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-pitch-multiplier">--</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: var(--color-body);">Slope Grade (%)</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-slope-percentage">--</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Column 3: Overhang & Ridge Deductions -->
+    <div style="border: 1px solid var(--color-hairline); border-radius: var(--radius-sm); padding: 1rem;">
+      <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-ink); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+        <span>Deductions & Overhang</span>
+        <span class="geist-badge" style="background-color: #f0f9ff; color: #0369a1;">Framing</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Overhang Length (Diagonal)</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-overhang-length">--</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 6px 0; color: var(--color-body);">Ridge Beam Deduction</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-ridge-deduction">--</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: var(--color-body);">Overhang Drop (Vertical)</td>
+          <td style="padding: 6px 0; font-weight: 600; font-family: var(--font-mono); text-align: right;" id="res-overhang-drop">--</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

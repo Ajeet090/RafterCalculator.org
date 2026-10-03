@@ -1,0 +1,334 @@
+---
+---
+<div class="container-custom" style="padding-bottom: 3rem;" id="estimator">
+  <div class="geist-card">
+    <!-- Header -->
+    <div style="border-bottom: 1px solid var(--color-hairline); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+      <span class="mono-eyebrow">Job-Site Takeoff & Costing</span>
+      <h2 class="heading-lg" style="margin-top: 4px;">Rafter Lumber & Material Estimator</h2>
+      <p class="body-md" style="margin-top: 4px;">
+        Calculate total rafter lumber count, recommended board purchase lengths, ridge board requirements, fascia stock, total board feet, and estimated material cost in your choice of measurement units.
+      </p>
+    </div>
+
+    <!-- Inputs & Output Split Grid -->
+    <div style="display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 24px;" class="estimator-grid">
+      
+      <!-- Left Inputs Panel -->
+      <div style="display: flex; flex-direction: column; gap: 16px; background-color: var(--color-hairline-soft); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--color-hairline);">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-hairline); padding-bottom: 10px;">
+          <h3 class="heading-md" style="font-size: 1rem; margin: 0;">Building & Framing Specs</h3>
+          
+          <!-- Estimator Unit Selector -->
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <label for="est-unit-selector" class="body-sm" style="font-weight: 600; color: var(--color-ink);">Unit:</label>
+            <select id="est-unit-selector" class="geist-select" style="width: auto; height: 32px; font-weight: 600; font-size: 0.8125rem;">
+              <option value="ft" selected>Feet (ft)</option>
+              <option value="in">Inches (in)</option>
+              <option value="cm">Centimeters (cm)</option>
+              <option value="m">Meters (m)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Building Roof Length -->
+        <div>
+          <label for="est-building-length" class="geist-label">
+            <span>Building Roof Length</span>
+            <span class="geist-label-hint">Gable to Gable</span>
+          </label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="number" id="est-building-length" class="geist-input geist-input-number" value="36" min="1" step="any" />
+            <span id="est-unit-label" class="body-sm" style="font-weight: 600; min-width: 24px;">ft</span>
+          </div>
+        </div>
+
+        <!-- Rafter Spacing O.C. -->
+        <div>
+          <label for="est-spacing" class="geist-label">
+            <span>Rafter Spacing (On-Center)</span>
+            <span class="geist-label-hint">Standard Framing</span>
+          </label>
+          <select id="est-spacing" class="geist-select">
+            <option value="16" selected>16 in / 40.6 cm o.c. (Standard Code)</option>
+            <option value="24">24 in / 61.0 cm o.c. (Advanced Framing)</option>
+            <option value="12">12 in / 30.5 cm o.c. (Heavy Snow Load)</option>
+            <option value="19.2">19.2 in / 48.8 cm o.c. (Truss Module)</option>
+            <option value="40">40 cm / 15.7 in o.c. (Metric Standard)</option>
+            <option value="60">60 cm / 23.6 in o.c. (Metric Advanced)</option>
+          </select>
+        </div>
+
+        <!-- Price per Lumber Board -->
+        <div>
+          <label for="est-board-price" class="geist-label">
+            <span>Est. Lumber Price per Board</span>
+            <span class="geist-label-hint">Local Yard Cost</span>
+          </label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="body-md" style="font-weight: 600;">$</span>
+            <input type="number" id="est-board-price" class="geist-input geist-input-number" value="18.50" min="0" step="0.50" />
+          </div>
+        </div>
+
+        <!-- Waste Factor % -->
+        <div>
+          <label for="est-waste" class="geist-label">
+            <span>Waste & Cut Allowance</span>
+            <span class="geist-label-hint">Cutoff Margin</span>
+          </label>
+          <select id="est-waste" class="geist-select">
+            <option value="0">0% (Exact Count)</option>
+            <option value="10" selected>10% (Recommended)</option>
+            <option value="15">15% (Custom Cuts & Knots)</option>
+            <option value="20">20% (Complex Roof / Hip-Valley)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right Calculated Takeoff Grid -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Top Cost Highlight Banner -->
+        <div style="background-color: var(--color-ink); color: var(--color-on-primary); padding: 1.25rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <span class="mono-eyebrow" style="color: var(--color-cyan);">Estimated Framing Material Cost</span>
+            <div id="est-total-cost" style="font-size: 2.25rem; font-weight: 700; font-family: var(--font-mono); line-height: 1.1; margin-top: 2px;">$0.00</div>
+          </div>
+          <div>
+            <span class="geist-badge geist-badge-dark" style="background-color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);">
+              Includes Waste Allowance
+            </span>
+          </div>
+        </div>
+
+        <!-- Takeoff Table Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+          <!-- Total Rafter Boards Needed -->
+          <div style="border: 1px solid var(--color-hairline); padding: 1rem; border-radius: var(--radius-sm);">
+            <span class="body-sm" style="font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;">Rafter Boards Needed</span>
+            <div id="est-rafter-count" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); margin-top: 4px;">0 pcs</div>
+            <div id="est-pairs-detail" style="font-size: 0.75rem; color: var(--color-mute); margin-top: 2px;">0 Common Pairs + Gables</div>
+          </div>
+
+          <!-- Recommended Lumber Purchase Length -->
+          <div style="border: 1px solid var(--color-hairline); padding: 1rem; border-radius: var(--radius-sm);">
+            <span class="body-sm" style="font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;">Buy Board Stock Size</span>
+            <div id="est-stock-size" style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-accent); margin-top: 4px;">-- ft</div>
+            <div id="est-stock-secondary" style="font-size: 0.75rem; color: var(--color-mute); margin-top: 2px;">Min length for cutoff</div>
+          </div>
+
+          <!-- Ridge Board Stock -->
+          <div style="border: 1px solid var(--color-hairline); padding: 1rem; border-radius: var(--radius-sm);">
+            <span class="body-sm" style="font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;">Ridge Board Length</span>
+            <div id="est-ridge-length" style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); margin-top: 4px;">0 ft</div>
+            <div style="font-size: 0.75rem; color: var(--color-mute); margin-top: 2px;">Center Ridge Stock</div>
+          </div>
+
+          <!-- Total Board Feet -->
+          <div style="border: 1px solid var(--color-hairline); padding: 1rem; border-radius: var(--radius-sm);">
+            <span class="body-sm" style="font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;">Total Board Feet (BF)</span>
+            <div id="est-board-feet" style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-mono); color: var(--color-ink); margin-top: 4px;">0 BF</div>
+            <div id="est-volume-secondary" style="font-size: 0.75rem; color: var(--color-mute); margin-top: 2px;">Volumetric Measure</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (max-width: 800px) {
+    .estimator-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    const estUnitSel = document.getElementById('est-unit-selector');
+    const inputBuildingLength = document.getElementById('est-building-length');
+    const estUnitLabel = document.getElementById('est-unit-label');
+    const selectSpacing = document.getElementById('est-spacing');
+    const inputPrice = document.getElementById('est-board-price');
+    const selectWaste = document.getElementById('est-waste');
+
+    const resTotalCost = document.getElementById('est-total-cost');
+    const resRafterCount = document.getElementById('est-rafter-count');
+    const resPairsDetail = document.getElementById('est-pairs-detail');
+    const resStockSize = document.getElementById('est-stock-size');
+    const resStockSecondary = document.getElementById('est-stock-secondary');
+    const resRidgeLength = document.getElementById('est-ridge-length');
+    const resBoardFeet = document.getElementById('est-board-feet');
+    const resVolumeSecondary = document.getElementById('est-volume-secondary');
+
+    // State base building roof length in FEET
+    let baseBuildingLengthFt = 36;
+    let estUnit = 'ft';
+
+    // Standard lumber board stock lengths in feet
+    const stockLengthsFt = [8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32];
+
+    function toBaseFeet(val, unitType = estUnit) {
+      const num = parseFloat(val) || 0;
+      if (unitType === 'in') return num / 12;
+      if (unitType === 'cm') return num / 30.48;
+      if (unitType === 'm') return num / 0.3048;
+      return num; // ft
+    }
+
+    function fromBaseFeet(feetVal, unitType = estUnit) {
+      if (unitType === 'in') return feetVal * 12;
+      if (unitType === 'cm') return feetVal * 30.48;
+      if (unitType === 'm') return feetVal * 0.3048;
+      return feetVal; // ft
+    }
+
+    function updateEstUnitLabels() {
+      estUnit = estUnitSel.value;
+      estUnitLabel.textContent = estUnit;
+
+      const displayVal = fromBaseFeet(baseBuildingLengthFt, estUnit);
+      if (estUnit === 'm') {
+        inputBuildingLength.value = displayVal.toFixed(2);
+      } else if (estUnit === 'cm') {
+        inputBuildingLength.value = displayVal.toFixed(1);
+      } else if (estUnit === 'in') {
+        inputBuildingLength.value = Math.round(displayVal);
+      } else {
+        inputBuildingLength.value = displayVal % 1 === 0 ? displayVal : displayVal.toFixed(1);
+      }
+    }
+
+    function calculateMaterials() {
+      const buildingLengthFt = baseBuildingLengthFt;
+      let spacingIn = parseFloat(selectSpacing.value) || 16;
+      
+      // Handle metric option spacing values (40cm = 15.748in, 60cm = 23.622in)
+      if (selectSpacing.value === '40') spacingIn = 40 / 2.54;
+      if (selectSpacing.value === '60') spacingIn = 60 / 2.54;
+
+      const pricePerBoard = parseFloat(inputPrice.value) || 0;
+      const wastePct = parseFloat(selectWaste.value) || 0;
+
+      if (buildingLengthFt <= 0) return;
+
+      // 1. Calculate Number of Rafter Pairs
+      const buildingLengthInches = buildingLengthFt * 12;
+      const pairsCount = Math.ceil(buildingLengthInches / spacingIn) + 1;
+      
+      // Total rafter boards = (pairs * 2) + 4 for fly rafters / gable sub-framing
+      let totalRafters = (pairsCount * 2) + 4;
+      const totalRaftersWithWaste = Math.ceil(totalRafters * (1 + wastePct / 100));
+
+      // 2. Determine Stock Purchase Length for Rafter Board
+      const totalLenText = document.getElementById('res-total-length')?.textContent || '';
+      
+      function parseLengthToFeet(text) {
+        if (!text) return 14;
+        const str = text.trim();
+        if (str.includes('cm')) {
+          const val = parseFloat(str);
+          return isNaN(val) ? 14 : val / 30.48;
+        }
+        if (str.includes('m') && !str.includes('cm')) {
+          const val = parseFloat(str);
+          return isNaN(val) ? 14 : val / 0.3048;
+        }
+        const matchInches = str.match(/^([\d.]+)"/);
+        if (matchInches) {
+          return parseFloat(matchInches[1]) / 12;
+        }
+        const matchFtIn = str.match(/^(\d+)'(?:\s*([\d.]+))?/);
+        if (matchFtIn) {
+          const feet = parseFloat(matchFtIn[1]) || 0;
+          const inches = parseFloat(matchFtIn[2]) || 0;
+          return feet + (inches / 12);
+        }
+        const fallback = parseFloat(str);
+        return isNaN(fallback) ? 14 : (fallback > 30 ? fallback / 12 : fallback);
+      }
+
+      const totalRafterLengthFt = parseLengthToFeet(totalLenText);
+      let recommendedStockFt = stockLengthsFt.find(len => len >= totalRafterLengthFt);
+      if (!recommendedStockFt) recommendedStockFt = Math.ceil(totalRafterLengthFt);
+
+      // 3. Board Feet Calculation
+      const boardFeetPerRafter = (2 * 6 * recommendedStockFt) / 12;
+      const totalBoardFeet = Math.round(totalRaftersWithWaste * boardFeetPerRafter);
+      const cubicMeters = (totalBoardFeet * 0.00235974).toFixed(2);
+
+      // 4. Ridge Board Length (Building Length + Overhangs + 2ft)
+      const ridgeLengthFt = Math.ceil(buildingLengthFt + 2);
+
+      // 5. Total Cost Estimate
+      const totalCost = totalRaftersWithWaste * pricePerBoard;
+
+      // Format Stock Size & Ridge Length output based on active estimator unit
+      let stockDisplay = `${recommendedStockFt}' Stock`;
+      let ridgeDisplay = `${ridgeLengthFt} ft`;
+
+      if (estUnit === 'm') {
+        const stockM = (recommendedStockFt * 0.3048).toFixed(2);
+        stockDisplay = `${stockM} m (${recommendedStockFt}')`;
+        ridgeDisplay = `${(ridgeLengthFt * 0.3048).toFixed(2)} m`;
+      } else if (estUnit === 'cm') {
+        const stockCm = Math.round(recommendedStockFt * 30.48);
+        stockDisplay = `${stockCm} cm (${recommendedStockFt}')`;
+        ridgeDisplay = `${Math.round(ridgeLengthFt * 30.48)} cm`;
+      } else if (estUnit === 'in') {
+        stockDisplay = `${recommendedStockFt * 12}" (${recommendedStockFt}')`;
+        ridgeDisplay = `${ridgeLengthFt * 12} in`;
+      }
+
+      // Render Results
+      resTotalCost.textContent = `$${totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      resRafterCount.textContent = `${totalRaftersWithWaste} pcs`;
+      resPairsDetail.textContent = `${pairsCount} pairs + ${totalRaftersWithWaste - (pairsCount * 2)} waste/gables`;
+      resStockSize.textContent = stockDisplay;
+      resStockSecondary.textContent = `Min length for cutoff`;
+      resRidgeLength.textContent = ridgeDisplay;
+      resBoardFeet.textContent = `${totalBoardFeet} BF`;
+      resVolumeSecondary.textContent = `≈ ${cubicMeters} m³ volume`;
+    }
+
+    // Input Events
+    estUnitSel.addEventListener('change', () => {
+      updateEstUnitLabels();
+      calculateMaterials();
+    });
+
+    inputBuildingLength.addEventListener('input', (e) => {
+      baseBuildingLengthFt = toBaseFeet(e.target.value);
+      calculateMaterials();
+    });
+
+    selectSpacing.addEventListener('change', calculateMaterials);
+    inputPrice.addEventListener('input', calculateMaterials);
+    selectWaste.addEventListener('change', calculateMaterials);
+
+    // Sync with Main Rafter Calculator Unit Selector
+    const mainUnitSel = document.getElementById('unit-selector');
+    if (mainUnitSel) {
+      mainUnitSel.addEventListener('change', () => {
+        const mainUnit = mainUnitSel.value;
+        if (mainUnit === 'cm' && estUnitSel.value !== 'cm') {
+          estUnitSel.value = 'cm';
+          updateEstUnitLabels();
+        } else if (mainUnit === 'm' && estUnitSel.value !== 'm') {
+          estUnitSel.value = 'm';
+          updateEstUnitLabels();
+        } else if ((mainUnit === 'in' || mainUnit === 'ft-in') && (estUnitSel.value === 'cm' || estUnitSel.value === 'm')) {
+          estUnitSel.value = 'ft';
+          updateEstUnitLabels();
+        }
+        calculateMaterials();
+      });
+    }
+
+    // Initial calculation
+    updateEstUnitLabels();
+    calculateMaterials();
+  })();
+</script>

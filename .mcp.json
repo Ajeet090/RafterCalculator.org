@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "astro-docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp",
+      "description": "Official Astro documentation MCP server for live up-to-date Astro docs"
+    },
+    "astro-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "astro-mcp"
+      ],
+      "description": "Local Astro project context and route metadata MCP server"
+    }
+  }
+}

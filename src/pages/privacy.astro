@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = "Privacy Policy | Rafter Calculator";
+const pageDescription = "Read the Rafter Calculator Privacy Policy. We prioritize your privacy with 100% client-side calculations, zero mandatory registration, and transparent local data usage.";
+const canonicalUrl = "https://raftercalculator.org/privacy";
+---
+
+<Layout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <Header />
+
+  <main style="background-color: var(--color-canvas); min-height: 80vh; padding: 3rem 0 5rem 0;">
+    <div class="container-custom" style="max-width: 900px;">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 1.5rem; font-size: 0.8125rem; color: var(--color-mute);">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <li><a href="/" style="color: var(--color-body); text-decoration: none;">Home</a></li>
+          <li><span>/</span></li>
+          <li style="color: var(--color-ink); font-weight: 500;">Privacy Policy</li>
+        </ol>
+      </nav>
+
+      <!-- Hero Title Section -->
+      <div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--color-hairline); padding-bottom: 2rem;">
+        <div class="mono-eyebrow" style="color: var(--color-mute); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          Legal & Transparency
+        </div>
+        <h1 style="font-size: 2.25rem; font-weight: 700; color: var(--color-ink); letter-spacing: -0.03em; margin-bottom: 1rem; line-height: 1.2;">
+          Privacy Policy
+        </h1>
+        <p style="font-size: 1rem; color: var(--color-body); line-height: 1.6; max-width: 720px;">
+          At <strong>Rafter Calculator</strong>, we believe privacy is a fundamental standard. Our framing estimation tool is built to process all calculations directly inside your browser without uploading your project dimensions to external servers.
+        </p>
+        <div style="margin-top: 1rem; font-size: 0.8125rem; color: var(--color-mute);">
+          Last Updated: September 2026
+        </div>
+      </div>
+
+      <!-- Policy Content Cards -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Section 1 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            1. Zero Personal Data Collection
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            Rafter Calculator (<a href="https://raftercalculator.org" style="color: var(--color-ink); font-weight: 500;">raftercalculator.org</a>) operates as a free, static web utility. You are never required to create an account, log in, or provide personal identifiable information (PII) such as your name, phone number, physical jobsite address, or billing details to use our calculator.
+          </p>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            All inputs—including roof span, rise, pitch ratio, eave overhang, ridge thickness, and lumber prices—remain strictly local to your computing device's memory.
+          </p>
+        </article>
+
+        <!-- Section 2 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            2. Client-Side Execution & Local Storage
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            Our calculation engine and interactive 2D SVG schematic canvas execute 100% in your client web browser using standard Vanilla JavaScript routines. When you adjust units (such as switching from Imperial Feet-Inches to Metric Centimeters) or save project presets:
+          </p>
+          <ul style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; padding-left: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 8px;">
+            <li><strong>Browser Storage:</strong> Preferences may be stored in your browser's <code style="font-family: var(--font-mono); font-size: 0.85em; background: var(--color-hairline-soft); padding: 2px 6px; border-radius: 4px;">localStorage</code> strictly for your convenience during repeat visits.</li>
+            <li><strong>No Remote Database:</strong> We do not transmit, index, or store your custom rafter cut dimensions on any remote database or cloud server.</li>
+          </ul>
+        </article>
+
+        <!-- Section 3 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            3. Server Logs & Web Analytics
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            Like almost all web servers, our hosting infrastructure automatically collects standard non-identifying technical metadata when requests are served. This may include:
+          </p>
+          <ul style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; padding-left: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 8px;">
+            <li>Anonymized IP addresses for DDoS mitigation and server security.</li>
+            <li>Browser type, device classification, operating system, and referral headers.</li>
+            <li>Time stamps and aggregate page view counts.</li>
+          </ul>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            This technical log data is used solely to maintain platform stability, ensure fast page load performance, and protect the site against cyber threats.
+          </p>
+        </article>
+
+        <!-- Section 4 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            4. Cookies & Third-Party Services
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            We do not sell, rent, or trade user data. We do not use intrusive tracking cookies or cross-site behavioral profiling.
+          </p>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            If Google Fonts or CDN assets are loaded to render Geist typography or iconography, those service providers receive standard web requests necessary to deliver visual static assets efficiently.
+          </p>
+        </article>
+
+        <!-- Section 5 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            5. Contacting Us About Privacy
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            If you have questions, concerns, or feedback regarding our privacy practices or security standards, please contact us via our <a href="/contact" style="color: var(--color-ink); font-weight: 500;">Contact Us page</a> or email us directly at:
+          </p>
+          <div style="background: var(--color-hairline-soft); padding: 12px 16px; border-radius: var(--radius-sm); display: inline-block; font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-ink);">
+            support@raftercalculator.org
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Bottom Nav Quick Link -->
+      <div style="margin-top: 3rem; text-align: center;">
+        <a href="/" class="geist-btn-secondary geist-btn-md">
+          ← Return to Rafter Calculator
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

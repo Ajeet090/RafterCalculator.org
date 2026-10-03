@@ -1,0 +1,1044 @@
+---
+import RafterCanvas from './RafterCanvas.astro';
+import ResultsSummary from './ResultsSummary.astro';
+---
+
+<div class="container-custom" style="padding-top: 2rem; padding-bottom: 3rem;" id="calculator">
+  <!-- Section Eyebrow Header -->
+  <div style="text-align: center; max-width: 720px; margin: 0 auto 2rem auto;">
+    <span class="mono-eyebrow">Interactive Framing Suite</span>
+    <h1 class="display-xl" style="margin-top: 6px;">Rafter Calculator</h1>
+    <p class="body-lg" style="margin-top: 10px;">
+      Calculate exact rafter length, plumb cut angles, birdsmouth notch depth, and height above plate (HAP) with a real-time 2D vector schematic preview.
+    </p>
+  </div>
+
+  <!-- Main Calculator Layout Grid (Controls Left, Canvas Right) -->
+  <div style="display: grid; grid-template-columns: minmax(320px, 460px) minmax(360px, 1fr); gap: 24px; align-items: start;" class="calculator-grid">
+    
+    <!-- LEFT PANEL: Inputs & Framing Controls -->
+    <div class="geist-card" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Card Header & Unit Selector -->
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-hairline); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="heading-md" style="font-size: 1.1rem; margin: 0;">Framing Parameters</span>
+          <button type="button" id="btn-reset-calculator" class="geist-btn-secondary geist-btn-sm" style="height: 26px; padding: 0 8px; font-size: 0.75rem; gap: 4px;" title="Reset All Inputs & View to Defaults">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Reset All</span>
+          </button>
+        </div>
+        
+        <!-- Unit Selector Dropdown -->
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <label for="unit-selector" class="body-sm" style="font-weight: 600; color: var(--color-ink);">Unit:</label>
+          <select id="unit-selector" class="geist-select" style="width: auto; height: 34px; font-weight: 600; font-size: 0.8125rem;">
+            <option value="in" selected>Inches (in)</option>
+            <option value="ft-in">Feet & Inches (ft - in)</option>
+            <option value="cm">Centimeters (cm)</option>
+            <option value="m">Meters (m)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Preset Pitch Quick Selector -->
+      <div>
+        <label class="geist-label">
+          <span>Common Pitch Presets</span>
+          <span class="geist-label-hint">Roof Type</span>
+        </label>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="geist-btn-secondary geist-btn-sm pitch-preset-btn" data-pitch="3" data-deg="14.04">3:12 (Shed)</button>
+          <button type="button" class="geist-btn-secondary geist-btn-sm pitch-preset-btn" data-pitch="4" data-deg="18.43">4:12 (Ranch)</button>
+          <button type="button" class="geist-btn-secondary geist-btn-sm pitch-preset-btn active-preset" data-pitch="6" data-deg="26.57">6:12 (Std)</button>
+          <button type="button" class="geist-btn-secondary geist-btn-sm pitch-preset-btn" data-pitch="8" data-deg="33.69">8:12 (Steep)</button>
+          <button type="button" class="geist-btn-secondary geist-btn-sm pitch-preset-btn" data-pitch="12" data-deg="45.00">12:12 (45°)</button>
+        </div>
+      </div>
+
+      <!-- Input 1: Run / Span with Toggle -->
+      <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <label for="input-span" class="geist-label" style="margin: 0;">
+            <span id="label-span-text">Total Roof Span</span>
+          </label>
+          <!-- Span vs Half-Run Toggle -->
+          <div class="geist-pill-toggle">
+            <button type="button" class="geist-pill-btn active" id="btn-mode-span">Span</button>
+            <button type="button" class="geist-pill-btn" id="btn-mode-run">Half Run</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="number" id="input-span" class="geist-input geist-input-number" value="288" min="1" step="any" placeholder="288" />
+          <span class="body-sm unit-label-text" style="font-weight: 600; min-width: 28px;">in</span>
+        </div>
+        <!-- Feet-Inches dual fields if ft-in selected -->
+        <div id="ft-in-span-container" style="display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+          <div>
+            <label class="body-sm" style="display: block; margin-bottom: 2px;">Feet (ft)</label>
+            <input type="number" id="input-span-ft" class="geist-input geist-input-number" value="24" min="0" step="1" />
+          </div>
+          <div>
+            <label class="body-sm" style="display: block; margin-bottom: 2px;">Inches (in)</label>
+            <input type="number" id="input-span-in" class="geist-input geist-input-number" value="0" min="0" max="11.9" step="any" />
+          </div>
+        </div>
+        <input type="range" id="slider-span" class="geist-range" min="12" max="600" value="288" step="1" />
+      </div>
+
+      <!-- Input 2: Roof Pitch / Slope -->
+      <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <label for="input-pitch" class="geist-label" style="margin: 0;">
+            <span id="label-pitch-text">Roof Pitch Ratio</span>
+          </label>
+          <!-- Pitch Mode Toggle for metric: Degrees vs Rise-in-12 -->
+          <div class="geist-pill-toggle" id="pitch-mode-toggle-container">
+            <button type="button" class="geist-pill-btn active" id="btn-pitch-ratio">x:12</button>
+            <button type="button" class="geist-pill-btn" id="btn-pitch-deg">Angle (°)</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="number" id="input-pitch" class="geist-input geist-input-number" value="6" min="0.5" max="30" step="any" />
+          <span id="unit-pitch-text" class="body-sm" style="font-weight: 600; min-width: 48px;">/ 12</span>
+        </div>
+        <input type="range" id="slider-pitch" class="geist-range" min="1" max="18" value="6" step="0.5" />
+      </div>
+
+      <!-- Input 3: Rafter Overhang (Eaves) -->
+      <div>
+        <label for="input-overhang" class="geist-label">
+          <span>Rafter Overhang (Eaves Run)</span>
+          <span class="geist-label-hint">Past Exterior Wall</span>
+        </label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="number" id="input-overhang" class="geist-input geist-input-number" value="16" min="0" step="any" />
+          <span class="body-sm unit-label-text" style="font-weight: 600; min-width: 28px;">in</span>
+        </div>
+        <input type="range" id="slider-overhang" class="geist-range" min="0" max="60" value="16" step="1" />
+      </div>
+
+      <!-- Advanced Construction Framing Parameters Accordion/Toggle -->
+      <div style="border-top: 1px solid var(--color-hairline); padding-top: 12px; margin-top: 4px;">
+        <button type="button" id="btn-toggle-advanced" style="width: 100%; display: flex; align-items: center; justify-content: space-between; background: none; border: none; font-weight: 600; font-size: 0.875rem; color: var(--color-ink); cursor: pointer; padding: 4px 0;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Birdsmouth & Lumber Framing Specs
+          </span>
+          <span id="advanced-chevron" style="transform: rotate(0deg); transition: transform 0.2s;">▼</span>
+        </button>
+
+        <div id="advanced-framing-fields" style="display: none; flex-direction: column; gap: 14px; margin-top: 12px; padding-top: 10px;">
+          
+          <!-- Input 4: Ridge Beam Thickness -->
+          <div>
+            <label for="input-ridge" class="geist-label">
+              <span>Ridge Beam Thickness</span>
+              <span class="geist-label-hint">Deduction (1.5" nominal)</span>
+            </label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="number" id="input-ridge" class="geist-input geist-input-number" value="1.5" min="0" step="any" />
+              <span class="body-sm unit-label-text" style="font-weight: 600; min-width: 28px;">in</span>
+            </div>
+          </div>
+
+          <!-- Input 5: Top Wall Plate Width -->
+          <div>
+            <label for="input-plate" class="geist-label">
+              <span>Wall Plate Width</span>
+              <span class="geist-label-hint">Seat Cut Length (3.5" for 2x4)</span>
+            </label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="number" id="input-plate" class="geist-input geist-input-number" value="3.5" min="0" step="any" />
+              <span class="body-sm unit-label-text" style="font-weight: 600; min-width: 28px;">in</span>
+            </div>
+          </div>
+
+          <!-- Input 6: Rafter Stock Board Depth (Width) -->
+          <div>
+            <label for="select-rafter-stock" class="geist-label">
+              <span>Rafter Board Depth (Nominal)</span>
+              <span class="geist-label-hint">Lumber Size</span>
+            </label>
+            <select id="select-rafter-stock" class="geist-select">
+              <option value="5.5" selected>2x6 (5.5" / 14.0 cm)</option>
+              <option value="7.25">2x8 (7.25" / 18.4 cm)</option>
+              <option value="9.25">2x10 (9.25" / 23.5 cm)</option>
+              <option value="11.25">2x12 (11.25" / 28.6 cm)</option>
+              <option value="custom">Custom Depth</option>
+            </select>
+            <div id="custom-depth-container" style="display: none; margin-top: 6px;">
+              <input type="number" id="input-rafter-depth" class="geist-input geist-input-number" value="5.5" min="1" step="any" placeholder="Enter depth in inches" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Visual 2D Vector Schematic Canvas -->
+    <div>
+      <RafterCanvas />
+    </div>
+  </div>
+
+  <!-- Bottom Full-Width Results Summary -->
+  <ResultsSummary />
+</div>
+
+<style>
+  @media (max-width: 900px) {
+    .calculator-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  .pitch-preset-btn.active-preset {
+    background-color: var(--color-ink);
+    color: var(--color-on-primary);
+    border-color: var(--color-ink);
+  }
+</style>
+
+<!-- Client-Side Real-Time Math & SVG Rendering Script -->
+<script is:inline>
+  (function() {
+    // Current Active State
+    let state = {
+      unit: 'in', // 'in', 'ft-in', 'cm', 'm'
+      isSpan: true, // true = Total Span, false = Half Run
+      spanBaseIn: 288, // Total Span in inches internally
+      pitchValue: 6, // Pitch ratio (x:12) or Angle (deg)
+      pitchIsDeg: false, // false = ratio x:12, true = degrees
+      overhangBaseIn: 16, // Overhang in inches
+      ridgeBaseIn: 1.5, // Ridge thickness in inches
+      plateBaseIn: 3.5, // Wall plate width in inches
+      rafterDepthIn: 5.5, // Rafter lumber depth in inches
+      viewMode: 'full' // 'full', 'birdsmouth', 'cutlist'
+    };
+
+    // DOM Elements Cache
+    const unitSel = document.getElementById('unit-selector');
+    const inputSpan = document.getElementById('input-span');
+    const inputSpanFt = document.getElementById('input-span-ft');
+    const inputSpanIn = document.getElementById('input-span-in');
+    const sliderSpan = document.getElementById('slider-span');
+    const labelSpanText = document.getElementById('label-span-text');
+    const ftInContainer = document.getElementById('ft-in-span-container');
+    const btnModeSpan = document.getElementById('btn-mode-span');
+    const btnModeRun = document.getElementById('btn-mode-run');
+
+    const inputPitch = document.getElementById('input-pitch');
+    const sliderPitch = document.getElementById('slider-pitch');
+    const labelPitchText = document.getElementById('label-pitch-text');
+    const unitPitchText = document.getElementById('unit-pitch-text');
+    const btnPitchRatio = document.getElementById('btn-pitch-ratio');
+    const btnPitchDeg = document.getElementById('btn-pitch-deg');
+
+    const inputOverhang = document.getElementById('input-overhang');
+    const sliderOverhang = document.getElementById('slider-overhang');
+
+    const btnToggleAdvanced = document.getElementById('btn-toggle-advanced');
+    const advancedFields = document.getElementById('advanced-framing-fields');
+    const advancedChevron = document.getElementById('advanced-chevron');
+
+    const inputRidge = document.getElementById('input-ridge');
+    const inputPlate = document.getElementById('input-plate');
+    const selectStock = document.getElementById('select-rafter-stock');
+    const inputDepth = document.getElementById('input-rafter-depth');
+    const customDepthContainer = document.getElementById('custom-depth-container');
+
+    const unitLabels = document.querySelectorAll('.unit-label-text');
+
+    // Preset buttons
+    const presetBtns = document.querySelectorAll('.pitch-preset-btn');
+
+    // Canvas View Buttons
+    const viewBtns = document.querySelectorAll('#canvas-view-toggle button');
+    const viewBadge = document.getElementById('canvas-view-badge');
+
+    // Results Elements
+    const resTotalLength = document.getElementById('res-total-length');
+    const resTotalLengthSecondary = document.getElementById('res-total-length-secondary');
+    const resStandardLength = document.getElementById('res-standard-length');
+    const resTotalRise = document.getElementById('res-total-rise');
+    const resPitchAngle = document.getElementById('res-pitch-angle');
+    const resSeatAngle = document.getElementById('res-seat-angle');
+
+    const resSeatWidth = document.getElementById('res-seat-width');
+    const resPlumbNotch = document.getElementById('res-plumb-notch');
+    const resHap = document.getElementById('res-hap');
+    const resEffectiveRun = document.getElementById('res-effective-run');
+    const resPitchMultiplier = document.getElementById('res-pitch-multiplier');
+    const resSlopePercentage = document.getElementById('res-slope-percentage');
+
+    const resOverhangLength = document.getElementById('res-overhang-length');
+    const resRidgeDeduction = document.getElementById('res-ridge-deduction');
+    const resOverhangDrop = document.getElementById('res-overhang-drop');
+
+    const btnCopySummary = document.getElementById('btn-copy-summary');
+    const copyBtnText = document.getElementById('copy-btn-text');
+
+    // Utility: Format Inches into Feet, Inches, and 1/16th Fraction
+    function formatFeetInchesFraction(totalInches) {
+      if (isNaN(totalInches) || totalInches <= 0) return '0"';
+      const feet = Math.floor(totalInches / 12);
+      const remainingInches = totalInches % 12;
+      const wholeInches = Math.floor(remainingInches);
+      const fractionPart = remainingInches - wholeInches;
+      
+      const sixteenths = Math.round(fractionPart * 16);
+      let fracStr = '';
+      
+      if (sixteenths === 16) {
+        // Round up to next inch
+        return formatFeetInchesFraction((feet * 12) + wholeInches + 1);
+      } else if (sixteenths > 0) {
+        // Simplify fraction
+        const gcd = (a, b) => b ? gcd(b, a % b) : a;
+        const divisor = gcd(sixteenths, 16);
+        fracStr = ` ${sixteenths / divisor}/${16 / divisor}`;
+      }
+
+      let result = '';
+      if (feet > 0) {
+        result += `${feet}' `;
+      }
+      if (wholeInches > 0 || fracStr || feet === 0) {
+        result += `${wholeInches}${fracStr}"`;
+      }
+      return result.trim();
+    }
+
+    // Convert value to display string according to current active unit
+    function formatValue(inchesVal, precision = 2) {
+      if (isNaN(inchesVal)) return '--';
+      if (state.unit === 'ft-in') {
+        return formatFeetInchesFraction(inchesVal);
+      } else if (state.unit === 'cm') {
+        const cm = inchesVal * 2.54;
+        return `${cm.toFixed(precision)} cm`;
+      } else if (state.unit === 'm') {
+        const m = inchesVal * 0.0254;
+        return `${m.toFixed(precision > 2 ? precision : 3)} m`;
+      } else {
+        // Inches
+        const ftIn = formatFeetInchesFraction(inchesVal);
+        return `${inchesVal.toFixed(precision)}" (${ftIn})`;
+      }
+    }
+
+    // Convert display input value back to base inches
+    function toBaseInches(val, unitType = state.unit) {
+      const num = parseFloat(val) || 0;
+      if (unitType === 'cm') return num / 2.54;
+      if (unitType === 'm') return num / 0.0254;
+      return num; // in or ft-in
+    }
+
+    // Convert base inches to display unit value
+    function fromBaseInches(baseIn, unitType = state.unit) {
+      if (unitType === 'cm') return baseIn * 2.54;
+      if (unitType === 'm') return baseIn * 0.0254;
+      return baseIn;
+    }
+
+    // Update Unit Suffix Labels
+    function updateUnitLabels() {
+      const unitText = state.unit === 'cm' ? 'cm' : state.unit === 'm' ? 'm' : 'in';
+      unitLabels.forEach(el => el.textContent = unitText);
+
+      if (state.unit === 'ft-in') {
+        ftInContainer.style.display = 'grid';
+        inputSpan.style.display = 'none';
+      } else {
+        ftInContainer.style.display = 'none';
+        inputSpan.style.display = 'block';
+      }
+    }
+
+    // Main Calculation Engine
+    function calculate() {
+      // 1. Effective Run
+      // If isSpan is true, Half Run = (Total Span - Ridge Thickness) / 2
+      // If isSpan is false, Half Run = Half Run Input - (Ridge / 2)
+      let effectiveRunIn = 0;
+      let ridgeDeductionIn = state.ridgeBaseIn / 2;
+
+      if (state.isSpan) {
+        effectiveRunIn = (state.spanBaseIn - state.ridgeBaseIn) / 2;
+      } else {
+        effectiveRunIn = state.spanBaseIn - ridgeDeductionIn;
+      }
+
+      if (effectiveRunIn <= 0) effectiveRunIn = 1;
+
+      // 2. Pitch Angle & Tangent
+      let pitchAngleRad = 0;
+      let riseIn = 0;
+
+      if (state.pitchIsDeg) {
+        pitchAngleRad = (state.pitchValue * Math.PI) / 180;
+        riseIn = effectiveRunIn * Math.tan(pitchAngleRad);
+      } else {
+        // Ratio Rise in 12
+        const risePer12 = state.pitchValue;
+        pitchAngleRad = Math.atan(risePer12 / 12);
+        riseIn = effectiveRunIn * (risePer12 / 12);
+      }
+
+      const pitchAngleDeg = (pitchAngleRad * 180) / Math.PI;
+      const seatAngleDeg = 90 - pitchAngleDeg;
+      const pitchMultiplier = Math.sqrt(1 + Math.pow(Math.tan(pitchAngleRad), 2));
+      const slopePercent = Math.tan(pitchAngleRad) * 100;
+
+      // 3. Hypotenuse Rafter Lengths
+      const standardRafterLengthIn = Math.sqrt(Math.pow(effectiveRunIn, 2) + Math.pow(riseIn, 2));
+      
+      // Overhang
+      const overhangRunIn = state.overhangBaseIn;
+      const overhangRiseIn = overhangRunIn * Math.tan(pitchAngleRad);
+      const overhangLengthIn = Math.sqrt(Math.pow(overhangRunIn, 2) + Math.pow(overhangRiseIn, 2));
+      
+      const totalRafterLengthIn = standardRafterLengthIn + overhangLengthIn;
+
+      // 4. Birdsmouth Cut Details
+      const seatCutWidthIn = state.plateBaseIn;
+      const plumbNotchDepthIn = seatCutWidthIn * Math.tan(pitchAngleRad);
+      const hapIn = Math.max(0, state.rafterDepthIn - plumbNotchDepthIn);
+
+      // Return calculated metrics object
+      return {
+        effectiveRunIn,
+        riseIn,
+        pitchAngleDeg,
+        seatAngleDeg,
+        pitchMultiplier,
+        slopePercent,
+        standardRafterLengthIn,
+        overhangRunIn,
+        overhangRiseIn,
+        overhangLengthIn,
+        totalRafterLengthIn,
+        seatCutWidthIn,
+        plumbNotchDepthIn,
+        hapIn,
+        ridgeDeductionIn
+      };
+    }
+
+    // Render Calculated Results to DOM
+    function renderResults(res) {
+      resTotalLength.textContent = formatValue(res.totalRafterLengthIn);
+      resTotalLengthSecondary.textContent = state.unit === 'ft-in' 
+        ? `${res.totalRafterLengthIn.toFixed(2)}" total`
+        : formatFeetInchesFraction(res.totalRafterLengthIn);
+
+      resStandardLength.textContent = formatValue(res.standardRafterLengthIn);
+      resTotalRise.textContent = formatValue(res.riseIn);
+
+      resPitchAngle.textContent = `${res.pitchAngleDeg.toFixed(1)}°`;
+      resSeatAngle.textContent = `Seat Cut Angle: ${res.seatAngleDeg.toFixed(1)}°`;
+
+      resSeatWidth.textContent = formatValue(res.seatCutWidthIn);
+      resPlumbNotch.textContent = formatValue(res.plumbNotchDepthIn);
+      resHap.textContent = formatValue(res.hapIn);
+
+      resEffectiveRun.textContent = formatValue(res.effectiveRunIn);
+      resPitchMultiplier.textContent = res.pitchMultiplier.toFixed(3);
+      resSlopePercentage.textContent = `${res.slopePercent.toFixed(1)}%`;
+
+      resOverhangLength.textContent = formatValue(res.overhangLengthIn);
+      resRidgeDeduction.textContent = formatValue(res.ridgeDeductionIn);
+      resOverhangDrop.textContent = formatValue(res.overhangRiseIn);
+
+      // Render Dynamic SVG Vector Schematic
+      renderSVG(res);
+    }
+
+    // Render Dynamic 2D SVG Schematic Canvas
+    function renderSVG(res) {
+      const graphicGroup = document.getElementById('svg-graphic-group');
+      if (!graphicGroup) return;
+
+      graphicGroup.innerHTML = '';
+
+      const viewBoxWidth = 800;
+      const viewBoxHeight = 500;
+
+      if (state.viewMode === 'full') {
+        renderFullSchematic(graphicGroup, res, viewBoxWidth, viewBoxHeight);
+      } else if (state.viewMode === 'birdsmouth') {
+        renderBirdsmouthZoom(graphicGroup, res, viewBoxWidth, viewBoxHeight);
+      } else if (state.viewMode === 'cutlist') {
+        renderCutListDiagram(graphicGroup, res, viewBoxWidth, viewBoxHeight);
+      }
+    }
+
+    // Mode 1: Full Roof Truss Schematic
+    function renderFullSchematic(group, res, w, h) {
+      const marginX = 80;
+      const marginY = 80;
+      const availW = w - marginX * 2;
+      const availH = h - marginY * 2;
+
+      // Scale factors based on total span + overhangs
+      const totalWidthIn = (res.effectiveRunIn * 2) + (res.overhangRunIn * 2) + state.ridgeBaseIn;
+      const totalHeightIn = res.riseIn + (res.overhangRiseIn > 0 ? res.overhangRiseIn : 0) + state.rafterDepthIn + 20;
+
+      const scaleX = availW / totalWidthIn;
+      const scaleY = availH / totalHeightIn;
+      const scale = Math.min(scaleX, scaleY, 4.5); // Cap max scale
+
+      // Peak coordinates at top center
+      const peakX = w / 2;
+      const peakY = marginY + 40;
+
+      // Wall Plate Positions
+      const wallLeftX = peakX - (res.effectiveRunIn * scale);
+      const wallRightX = peakX + (res.effectiveRunIn * scale);
+      const eaveY = peakY + (res.riseIn * scale);
+
+      // Overhang Ends
+      const eaveLeftX = wallLeftX - (res.overhangRunIn * scale);
+      const eaveRightX = wallRightX + (res.overhangRunIn * scale);
+      const eaveBottomY = eaveY + (res.overhangRiseIn * scale);
+
+      // Wall Plate Rectangles (Grey)
+      const plateW = Math.max(16, state.plateBaseIn * scale);
+      const plateH = 40;
+
+      // SVG Construction Elements
+      let svgHtml = `
+        <!-- Background Baseline -->
+        <line x1="40" y1="${eaveY + plateH}" x2="${w - 40}" y2="${eaveY + plateH}" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 4"/>
+        
+        <!-- Left Wall Plate -->
+        <rect x="${wallLeftX - plateW}" y="${eaveY}" width="${plateW}" height="${plateH}" fill="#334155" stroke="#475569" stroke-width="1.5" rx="2"/>
+        <!-- Right Wall Plate -->
+        <rect x="${wallRightX}" y="${eaveY}" width="${plateW}" height="${plateH}" fill="#334155" stroke="#475569" stroke-width="1.5" rx="2"/>
+
+        <!-- Center Ridge Beam -->
+        <rect x="${peakX - (state.ridgeBaseIn * scale / 2)}" y="${peakY}" width="${Math.max(10, state.ridgeBaseIn * scale)}" height="${Math.max(30, state.rafterDepthIn * scale)}" fill="#475569" stroke="#94a3b8" stroke-width="1.5" rx="2"/>
+
+        <!-- Left Rafter Board (Angled Path) -->
+        <polyline points="${eaveLeftX},${eaveBottomY} ${wallLeftX},${eaveY} ${peakX - (state.ridgeBaseIn * scale / 2)},${peakY}" fill="none" stroke="#0070f3" stroke-width="${Math.max(12, state.rafterDepthIn * scale * 0.8)}" stroke-linecap="square" stroke-linejoin="round"/>
+        
+        <!-- Right Rafter Board -->
+        <polyline points="${eaveRightX},${eaveBottomY} ${wallRightX},${eaveY} ${peakX + (state.ridgeBaseIn * scale / 2)},${peakY}" fill="none" stroke="#0070f3" stroke-width="${Math.max(12, state.rafterDepthIn * scale * 0.8)}" stroke-linecap="square" stroke-linejoin="round"/>
+
+        <!-- Dimension Line: Total Span -->
+        <line x1="${wallLeftX}" y1="${eaveY + plateH + 24}" x2="${wallRightX}" y2="${eaveY + plateH + 24}" stroke="#38bdf8" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${peakX}" y="${eaveY + plateH + 42}" fill="#38bdf8" font-size="13" font-family="JetBrains Mono" font-weight="600" text-anchor="middle">
+          Span: ${formatValue(state.spanBaseIn)}
+        </text>
+
+        <!-- Dimension Line: Rise -->
+        <line x1="${peakX + 40}" y1="${peakY}" x2="${peakX + 40}" y2="${eaveY}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text x="${peakX + 50}" y="${peakY + (res.riseIn * scale / 2)}" fill="#38bdf8" font-size="12" font-family="JetBrains Mono" font-weight="600" text-anchor="start" dominant-baseline="middle">
+          Rise: ${formatValue(res.riseIn)}
+        </text>
+
+        <!-- Left Rafter Hypotenuse Callout -->
+        <text x="${(eaveLeftX + peakX) / 2 - 20}" y="${(eaveBottomY + peakY) / 2 - 20}" fill="#e2e8f0" font-size="13" font-family="JetBrains Mono" font-weight="700" text-anchor="end" transform="rotate(-${res.pitchAngleDeg}, ${(eaveLeftX + peakX) / 2}, ${(eaveBottomY + peakY) / 2})">
+          Total Length: ${formatValue(res.totalRafterLengthIn)}
+        </text>
+
+        <!-- Pitch Arc Callout -->
+        <path d="M ${wallLeftX + 30} ${eaveY} A 30 30 0 0 0 ${wallLeftX + 30 * Math.cos(res.pitchAngleDeg * Math.PI / 180)} ${eaveY - 30 * Math.sin(res.pitchAngleDeg * Math.PI / 180)}" fill="none" stroke="#f5a623" stroke-width="2"/>
+        <text x="${wallLeftX + 45}" y="${eaveY - 10}" fill="#f5a623" font-size="12" font-family="JetBrains Mono" font-weight="700">
+          ${res.pitchAngleDeg.toFixed(1)}° (${state.pitchIsDeg ? res.pitchValue + '°' : state.pitchValue + ':12'})
+        </text>
+      `;
+
+      group.innerHTML = svgHtml;
+    }
+
+    // Mode 2: Zoomed Birdsmouth Notch & Wall Plate Detail
+    function renderBirdsmouthZoom(group, res, w, h) {
+      const centerX = w / 2;
+      const centerY = h / 2 + 30;
+
+      const scale = 22; // High detail zoom scale
+
+      const seatW = res.seatCutWidthIn * scale;
+      const plumbH = res.plumbNotchDepthIn * scale;
+      const hapH = res.hapIn * scale;
+      const totalDepthH = state.rafterDepthIn * scale;
+
+      const angleRad = (res.pitchAngleDeg * Math.PI) / 180;
+
+      let svgHtml = `
+        <g transform="translate(${centerX - 80}, ${centerY})">
+          <!-- Background Wall Plate -->
+          <rect x="-10" y="0" width="${seatW + 40}" height="100" fill="#334155" stroke="#475569" stroke-width="2" rx="4"/>
+          <text x="${seatW / 2 + 10}" y="50" fill="#94a3b8" font-size="14" font-family="JetBrains Mono" text-anchor="middle">Top Wall Plate (${formatValue(state.plateBaseIn)})</text>
+
+          <!-- Zoomed Rafter with Birdsmouth Notch Cut -->
+          <path d="
+            M -120, ${-120 * Math.tan(angleRad)}
+            L ${seatW + 140}, ${-(seatW + 140) * Math.tan(angleRad)}
+            L ${seatW + 140 + totalDepthH * Math.sin(angleRad)}, ${-(seatW + 140) * Math.tan(angleRad) - totalDepthH * Math.cos(angleRad)}
+            L ${seatW}, 0
+            L 0, 0
+            L 0, ${-plumbH}
+            L -120, ${-120 * Math.tan(angleRad) - totalDepthH * Math.cos(angleRad)}
+            Z"
+            fill="url(#wood-pattern)" stroke="#0070f3" stroke-width="3.5" stroke-linejoin="round"/>
+
+          <!-- Highlight Birdsmouth Cut Notch -->
+          <polyline points="0,0 ${seatW},0 ${0},${-plumbH}" fill="#f5a623" fill-opacity="0.3" stroke="#f5a623" stroke-width="3"/>
+
+          <!-- Seat Cut Dimension Line -->
+          <line x1="0" y1="15" x2="${seatW}" y2="15" stroke="#38bdf8" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+          <text x="${seatW / 2}" y="32" fill="#38bdf8" font-size="12" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">
+            Seat Cut: ${formatValue(res.seatCutWidthIn)}
+          </text>
+
+          <!-- Plumb Notch Depth Line -->
+          <line x1="-15" y1="0" x2="-15" y2="${-plumbH}" stroke="#f5a623" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+          <text x="-25" y="${-plumbH / 2}" fill="#f5a623" font-size="12" font-family="JetBrains Mono" font-weight="700" text-anchor="end" dominant-baseline="middle">
+            Notch Depth: ${formatValue(res.plumbNotchDepthIn)}
+          </text>
+
+          <!-- HAP Callout Line -->
+          <line x1="${seatW + 20}" y1="0" x2="${seatW + 20}" y2="${-hapH}" stroke="#10b981" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+          <text x="${seatW + 30}" y="${-hapH / 2}" fill="#10b981" font-size="13" font-family="JetBrains Mono" font-weight="700" text-anchor="start" dominant-baseline="middle">
+            HAP: ${formatValue(res.hapIn)}
+          </text>
+        </g>
+
+        <text x="${w / 2}" y="45" fill="#e2e8f0" font-size="16" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">
+          Birdsmouth Joint Detail (HAP = ${formatValue(res.hapIn)})
+        </text>
+      `;
+
+      group.innerHTML = svgHtml;
+    }
+
+    // Mode 3: Rafter Cut List & Angle Markings
+    function renderCutListDiagram(group, res, w, h) {
+      const startX = 60;
+      const startY = h / 2;
+      const lengthX = w - 120;
+      const boardH = 60;
+
+      let svgHtml = `
+        <g transform="translate(0, 0)">
+          <text x="${w / 2}" y="50" fill="#e2e8f0" font-size="16" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">
+            Single Rafter Board Cut Layout Diagram
+          </text>
+
+          <!-- Rafter Board Rectangle -->
+          <path d="
+            M ${startX},${startY}
+            L ${startX + 30},${startY - boardH}
+            L ${startX + lengthX},${startY - boardH}
+            L ${startX + lengthX - 30},${startY}
+            Z"
+            fill="#1e293b" stroke="#0070f3" stroke-width="3"/>
+
+          <!-- Top Ridge Plumb Cut Line -->
+          <line x1="${startX + lengthX}" y1="${startY - boardH}" x2="${startX + lengthX - 30}" y2="${startY}" stroke="#ef4444" stroke-width="3" stroke-dasharray="4 2"/>
+          <text x="${startX + lengthX - 10}" y="${startY - boardH - 15}" fill="#ef4444" font-size="13" font-family="JetBrains Mono" font-weight="700" text-anchor="end">
+            Top Plumb Cut (${res.pitchAngleDeg.toFixed(1)}°)
+          </text>
+
+          <!-- Tail Eave Cut Line -->
+          <line x1="${startX}" y1="${startY}" x2="${startX + 30}" y2="${startY - boardH}" stroke="#ef4444" stroke-width="3" stroke-dasharray="4 2"/>
+          <text x="${startX + 15}" y="${startY + 30}" fill="#ef4444" font-size="13" font-family="JetBrains Mono" font-weight="700" text-anchor="start">
+            Tail Plumb Cut (${res.pitchAngleDeg.toFixed(1)}°)
+          </text>
+
+          <!-- Birdsmouth Notch Cut -->
+          <polygon points="${startX + lengthX * 0.3},${startY} ${startX + lengthX * 0.3 + 25},${startY} ${startX + lengthX * 0.3},${startY - 20}" fill="#f5a623" stroke="#f5a623" stroke-width="2"/>
+          <text x="${startX + lengthX * 0.3 + 12}" y="${startY + 25}" fill="#f5a623" font-size="12" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">
+            Birdsmouth Notch
+          </text>
+
+          <!-- Total Length Dimension Line -->
+          <line x1="${startX}" y1="${startY - boardH - 40}" x2="${startX + lengthX}" y2="${startY - boardH - 40}" stroke="#38bdf8" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+          <text x="${w / 2}" y="${startY - boardH - 52}" fill="#38bdf8" font-size="14" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">
+            Total Board Length Needed: ${formatValue(res.totalRafterLengthIn)}
+          </text>
+        </g>
+      `;
+
+      group.innerHTML = svgHtml;
+    }
+
+    // Sync UI Inputs with Internal State & Trigger Calculation
+    function update() {
+      // Read Inputs
+      state.unit = unitSel.value;
+      
+      // Span
+      if (state.unit === 'ft-in') {
+        const ft = parseFloat(inputSpanFt.value) || 0;
+        const inch = parseFloat(inputSpanIn.value) || 0;
+        state.spanBaseIn = (ft * 12) + inch;
+      } else {
+        const val = parseFloat(inputSpan.value) || 0;
+        state.spanBaseIn = toBaseInches(val);
+      }
+
+      // Pitch
+      state.pitchValue = parseFloat(inputPitch.value) || 6;
+
+      // Overhang
+      state.overhangBaseIn = toBaseInches(parseFloat(inputOverhang.value) || 0);
+
+      // Ridge
+      state.ridgeBaseIn = toBaseInches(parseFloat(inputRidge.value) || 0);
+
+      // Plate
+      state.plateBaseIn = toBaseInches(parseFloat(inputPlate.value) || 0);
+
+      // Stock Depth
+      if (selectStock.value === 'custom') {
+        customDepthContainer.style.display = 'block';
+        state.rafterDepthIn = toBaseInches(parseFloat(inputDepth.value) || 5.5);
+      } else {
+        customDepthContainer.style.display = 'none';
+        state.rafterDepthIn = parseFloat(selectStock.value);
+      }
+
+      // Execute Math & Render
+      const res = calculate();
+      renderResults(res);
+    }
+
+    // Event Listeners Registration
+    unitSel.addEventListener('change', () => {
+      state.unit = unitSel.value;
+      updateUnitLabels();
+      
+      const spanDisplay = fromBaseInches(state.spanBaseIn, state.unit);
+      const overhangDisplay = fromBaseInches(state.overhangBaseIn, state.unit);
+      const ridgeDisplay = fromBaseInches(state.ridgeBaseIn, state.unit);
+      const plateDisplay = fromBaseInches(state.plateBaseIn, state.unit);
+
+      if (state.unit === 'cm') {
+        sliderSpan.min = 30; sliderSpan.max = 1500; sliderSpan.step = 1;
+        sliderSpan.value = spanDisplay.toFixed(1);
+        inputSpan.value = spanDisplay.toFixed(1);
+
+        sliderOverhang.min = 0; sliderOverhang.max = 150; sliderOverhang.step = 1;
+        sliderOverhang.value = overhangDisplay.toFixed(1);
+        inputOverhang.value = overhangDisplay.toFixed(1);
+      } else if (state.unit === 'm') {
+        sliderSpan.min = 0.5; sliderSpan.max = 15; sliderSpan.step = 0.05;
+        sliderSpan.value = spanDisplay.toFixed(2);
+        inputSpan.value = spanDisplay.toFixed(2);
+
+        sliderOverhang.min = 0; sliderOverhang.max = 1.5; sliderOverhang.step = 0.02;
+        sliderOverhang.value = overhangDisplay.toFixed(2);
+        inputOverhang.value = overhangDisplay.toFixed(2);
+      } else if (state.unit === 'ft-in') {
+        const feet = Math.floor(state.spanBaseIn / 12);
+        const inches = state.spanBaseIn % 12;
+        inputSpanFt.value = feet;
+        inputSpanIn.value = inches % 1 === 0 ? inches : inches.toFixed(1);
+
+        sliderSpan.min = 12; sliderSpan.max = 600; sliderSpan.step = 1;
+        sliderSpan.value = state.spanBaseIn;
+
+        sliderOverhang.min = 0; sliderOverhang.max = 60; sliderOverhang.step = 1;
+        sliderOverhang.value = state.overhangBaseIn;
+        inputOverhang.value = state.overhangBaseIn;
+      } else {
+        // Inches
+        sliderSpan.min = 12; sliderSpan.max = 600; sliderSpan.step = 1;
+        sliderSpan.value = state.spanBaseIn;
+        inputSpan.value = state.spanBaseIn;
+
+        sliderOverhang.min = 0; sliderOverhang.max = 60; sliderOverhang.step = 1;
+        sliderOverhang.value = state.overhangBaseIn;
+        inputOverhang.value = state.overhangBaseIn;
+      }
+
+      inputRidge.value = ridgeDisplay % 1 === 0 ? ridgeDisplay : ridgeDisplay.toFixed(2);
+      inputPlate.value = plateDisplay % 1 === 0 ? plateDisplay : plateDisplay.toFixed(2);
+
+      update();
+    });
+
+    // Span inputs & sliders
+    inputSpan.addEventListener('input', (e) => {
+      state.spanBaseIn = toBaseInches(e.target.value);
+      sliderSpan.value = e.target.value;
+      update();
+    });
+
+    sliderSpan.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      inputSpan.value = val;
+      state.spanBaseIn = toBaseInches(val);
+      update();
+    });
+
+    inputSpanFt.addEventListener('input', update);
+    inputSpanIn.addEventListener('input', update);
+
+    // Span vs Half-Run Mode Toggle
+    btnModeSpan.addEventListener('click', () => {
+      state.isSpan = true;
+      btnModeSpan.classList.add('active');
+      btnModeRun.classList.remove('active');
+      labelSpanText.textContent = 'Total Roof Span';
+      update();
+    });
+
+    btnModeRun.addEventListener('click', () => {
+      state.isSpan = false;
+      btnModeRun.classList.add('active');
+      btnModeSpan.classList.remove('active');
+      labelSpanText.textContent = 'Half Roof Run';
+      update();
+    });
+
+    // Pitch inputs & sliders
+    inputPitch.addEventListener('input', (e) => {
+      state.pitchValue = parseFloat(e.target.value) || 0;
+      sliderPitch.value = state.pitchValue;
+      update();
+    });
+
+    sliderPitch.addEventListener('input', (e) => {
+      state.pitchValue = parseFloat(e.target.value);
+      inputPitch.value = state.pitchValue;
+      update();
+    });
+
+    // Pitch Ratio vs Deg Toggle
+    btnPitchRatio.addEventListener('click', () => {
+      state.pitchIsDeg = false;
+      btnPitchRatio.classList.add('active');
+      btnPitchDeg.classList.remove('active');
+      labelPitchText.textContent = 'Roof Pitch Ratio';
+      unitPitchText.textContent = '/ 12';
+      sliderPitch.min = 1; sliderPitch.max = 18; sliderPitch.step = 0.5; sliderPitch.value = 6;
+      inputPitch.value = 6;
+      state.pitchValue = 6;
+      update();
+    });
+
+    btnPitchDeg.addEventListener('click', () => {
+      state.pitchIsDeg = true;
+      btnPitchDeg.classList.add('active');
+      btnPitchRatio.classList.remove('active');
+      labelPitchText.textContent = 'Roof Pitch Angle';
+      unitPitchText.textContent = 'deg (°)';
+      sliderPitch.min = 5; sliderPitch.max = 70; sliderPitch.step = 1; sliderPitch.value = 26.57;
+      inputPitch.value = 26.57;
+      state.pitchValue = 26.57;
+      update();
+    });
+
+    // Presets
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active-preset'));
+        btn.classList.add('active-preset');
+
+        const pitchVal = parseFloat(btn.dataset.pitch);
+        const degVal = parseFloat(btn.dataset.deg);
+
+        if (state.pitchIsDeg) {
+          inputPitch.value = degVal;
+          sliderPitch.value = degVal;
+          state.pitchValue = degVal;
+        } else {
+          inputPitch.value = pitchVal;
+          sliderPitch.value = pitchVal;
+          state.pitchValue = pitchVal;
+        }
+        update();
+      });
+    });
+
+    // Overhang
+    inputOverhang.addEventListener('input', (e) => {
+      sliderOverhang.value = e.target.value;
+      update();
+    });
+
+    sliderOverhang.addEventListener('input', (e) => {
+      inputOverhang.value = e.target.value;
+      update();
+    });
+
+    // Advanced toggle
+    btnToggleAdvanced.addEventListener('click', () => {
+      const isHidden = advancedFields.style.display === 'none';
+      advancedFields.style.display = isHidden ? 'flex' : 'none';
+      advancedChevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    inputRidge.addEventListener('input', update);
+    inputPlate.addEventListener('input', update);
+    selectStock.addEventListener('change', update);
+    inputDepth.addEventListener('input', update);
+
+    // View mode switcher
+    viewBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        viewBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        state.viewMode = btn.dataset.view;
+        viewBadge.textContent = state.viewMode === 'full' ? 'Full Schematic' : state.viewMode === 'birdsmouth' ? 'Birdsmouth Zoom' : 'Cut Diagram';
+        update();
+      });
+    });
+
+    // Reset All Calculator Inputs & View Function
+    function resetCalculator() {
+      // 1. Reset Internal State
+      state.unit = 'in';
+      state.isSpan = true;
+      state.spanBaseIn = 288;
+      state.pitchValue = 6;
+      state.pitchIsDeg = false;
+      state.overhangBaseIn = 16;
+      state.ridgeBaseIn = 1.5;
+      state.plateBaseIn = 3.5;
+      state.rafterDepthIn = 5.5;
+      state.viewMode = 'full';
+
+      // 2. Reset Unit Selector
+      if (unitSel) unitSel.value = 'in';
+      updateUnitLabels();
+
+      // 3. Reset Span / Run Controls
+      if (btnModeSpan) btnModeSpan.classList.add('active');
+      if (btnModeRun) btnModeRun.classList.remove('active');
+      if (labelSpanText) labelSpanText.textContent = 'Total Roof Span';
+      if (inputSpan) {
+        inputSpan.style.display = 'block';
+        inputSpan.value = 288;
+      }
+      if (ftInContainer) ftInContainer.style.display = 'none';
+      if (inputSpanFt) inputSpanFt.value = 24;
+      if (inputSpanIn) inputSpanIn.value = 0;
+      if (sliderSpan) {
+        sliderSpan.min = 12;
+        sliderSpan.max = 600;
+        sliderSpan.value = 288;
+      }
+
+      // 4. Reset Pitch Controls
+      if (btnPitchRatio) btnPitchRatio.classList.add('active');
+      if (btnPitchDeg) btnPitchDeg.classList.remove('active');
+      if (labelPitchText) labelPitchText.textContent = 'Roof Pitch Ratio';
+      if (unitPitchText) unitPitchText.textContent = '/ 12';
+      if (inputPitch) inputPitch.value = 6;
+      if (sliderPitch) {
+        sliderPitch.min = 1;
+        sliderPitch.max = 18;
+        sliderPitch.step = 0.5;
+        sliderPitch.value = 6;
+      }
+      presetBtns.forEach(b => b.classList.remove('active-preset'));
+      if (presetBtns[2]) presetBtns[2].classList.add('active-preset');
+
+      // 5. Reset Overhang
+      if (inputOverhang) inputOverhang.value = 16;
+      if (sliderOverhang) sliderOverhang.value = 16;
+
+      // 6. Reset Advanced Framing Controls
+      if (inputRidge) inputRidge.value = 1.5;
+      if (inputPlate) inputPlate.value = 3.5;
+      if (selectStock) selectStock.value = '5.5';
+      if (inputDepth) inputDepth.value = 5.5;
+      if (customDepthContainer) customDepthContainer.style.display = 'none';
+
+      // 7. Reset View Mode Switcher
+      viewBtns.forEach(b => b.classList.remove('active'));
+      if (viewBtns[0]) viewBtns[0].classList.add('active');
+      if (viewBadge) viewBadge.textContent = 'Full Schematic';
+
+      // 8. Execute Update & Trigger Material Takeoff Refresh
+      update();
+
+      const estLen = document.getElementById('est-building-length');
+      if (estLen) {
+        estLen.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+
+    // Attach Reset Event Listeners
+    document.getElementById('btn-reset-calculator')?.addEventListener('click', resetCalculator);
+    document.getElementById('btn-reset-view')?.addEventListener('click', resetCalculator);
+
+    // SVG Download Button
+    document.getElementById('btn-download-svg')?.addEventListener('click', () => {
+      const svg = document.getElementById('rafter-svg');
+      if (!svg) return;
+
+      const serializer = new XMLSerializer();
+      let source = serializer.serializeToString(svg);
+
+      if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+        source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+      }
+
+      const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = `rafter-schematic-${state.viewMode}.svg`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+
+    // Copy Results Summary Button
+    btnCopySummary?.addEventListener('click', () => {
+      const res = calculate();
+      const textBlock = `
+=== RAFTER CALCULATOR FRAMING SPECIFICATIONS ===
+Website: Raftercalculator.org
+
+[INPUT PARAMETERS]
+- Mode: ${state.isSpan ? 'Total Roof Span' : 'Half Run'}
+- Span / Run: ${formatValue(state.spanBaseIn)}
+- Pitch: ${state.pitchIsDeg ? state.pitchValue + '°' : state.pitchValue + ':12'} (${res.pitchAngleDeg.toFixed(1)}°)
+- Overhang Eaves: ${formatValue(state.overhangBaseIn)}
+- Ridge Beam Thickness: ${formatValue(state.ridgeBaseIn)}
+- Wall Plate Width: ${formatValue(state.plateBaseIn)}
+- Rafter Board Depth: ${formatValue(state.rafterDepthIn)}
+
+[CALCULATED RESULTS]
+- Total Rafter Length (incl. Overhang): ${formatValue(res.totalRafterLengthIn)}
+- Standard Rafter Length (Ridge to Wall): ${formatValue(res.standardRafterLengthIn)}
+- Total Roof Rise: ${formatValue(res.riseIn)}
+- Effective Horizontal Run: ${formatValue(res.effectiveRunIn)}
+
+[CUT & BIRDSMOUTH SPECS]
+- Top Plumb Cut Angle: ${res.pitchAngleDeg.toFixed(1)}°
+- Bottom Seat Cut Angle: ${res.seatAngleDeg.toFixed(1)}°
+- Birdsmouth Seat Cut Width: ${formatValue(res.seatCutWidthIn)}
+- Birdsmouth Plumb Notch Depth: ${formatValue(res.plumbNotchDepthIn)}
+- HAP (Height Above Plate): ${formatValue(res.hapIn)}
+- Overhang Diagonal Length: ${formatValue(res.overhangLengthIn)}
+================================================
+`.trim();
+
+      navigator.clipboard.writeText(textBlock).then(() => {
+        copyBtnText.textContent = 'Copied!';
+        btnCopySummary.style.backgroundColor = 'var(--color-success)';
+        setTimeout(() => {
+          copyBtnText.textContent = 'Copy Results';
+          btnCopySummary.style.backgroundColor = 'var(--color-primary)';
+        }, 2000);
+      });
+    });
+
+    // Initial Trigger on DOM Load
+    updateUnitLabels();
+    update();
+
+  })();
+</script>

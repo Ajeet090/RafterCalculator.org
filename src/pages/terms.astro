@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = "Terms & Conditions | Rafter Calculator";
+const pageDescription = "Read the Terms & Conditions of use for Rafter Calculator. Review our service scope, structural engineering disclaimers, and user responsibilities.";
+const canonicalUrl = "https://raftercalculator.org/terms";
+---
+
+<Layout title={pageTitle} description={pageDescription} canonicalUrl={canonicalUrl}>
+  <Header />
+
+  <main style="background-color: var(--color-canvas); min-height: 80vh; padding: 3rem 0 5rem 0;">
+    <div class="container-custom" style="max-width: 900px;">
+      
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: 1.5rem; font-size: 0.8125rem; color: var(--color-mute);">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <li><a href="/" style="color: var(--color-body); text-decoration: none;">Home</a></li>
+          <li><span>/</span></li>
+          <li style="color: var(--color-ink); font-weight: 500;">Terms & Conditions</li>
+        </ol>
+      </nav>
+
+      <!-- Hero Title Section -->
+      <div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--color-hairline); padding-bottom: 2rem;">
+        <div class="mono-eyebrow" style="color: var(--color-mute); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          Legal Agreement
+        </div>
+        <h1 style="font-size: 2.25rem; font-weight: 700; color: var(--color-ink); letter-spacing: -0.03em; margin-bottom: 1rem; line-height: 1.2;">
+          Terms & Conditions
+        </h1>
+        <p style="font-size: 1rem; color: var(--color-body); line-height: 1.6; max-width: 720px;">
+          Please read these Terms & Conditions carefully before using <strong>Rafter Calculator</strong> (<a href="https://raftercalculator.org" style="color: var(--color-ink); font-weight: 500;">raftercalculator.org</a>). By accessing or using our website, you agree to be bound by these terms.
+        </p>
+        <div style="margin-top: 1rem; font-size: 0.8125rem; color: var(--color-mute);">
+          Effective Date: September 2026
+        </div>
+      </div>
+
+      <!-- Policy Content Cards -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Section 1 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            1. Acceptance of Terms
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            By visiting, accessing, or utilizing any portion of Rafter Calculator, you confirm that you have read, understood, and agreed to these Terms & Conditions. If you do not agree with any part of these terms, you should immediately discontinue use of the website.
+          </p>
+        </article>
+
+        <!-- Section 2 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            2. Scope of Service & Educational Purpose
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            Rafter Calculator provides free web-based mathematical software, 2D SVG schematics, and material estimation algorithms to assist carpenters, contractors, roofers, and DIY enthusiasts with roof rafter dimension calculations.
+          </p>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            The website and its output figures are provided for estimation, planning, and educational purposes only.
+          </p>
+        </article>
+
+        <!-- Section 3: Engineering Disclaimer (Crucial for Construction Tools) -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem;">
+            <div style="background: var(--color-warning-soft, #ffefcf); color: var(--color-warning-deep, #ab570a); padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; font-family: var(--font-mono);">
+              IMPORTANT NOTICE
+            </div>
+            <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); letter-spacing: -0.01em; margin: 0;">
+              3. Professional & Structural Engineering Disclaimer
+            </h2>
+          </div>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            Rafter Calculator does not provide certified structural engineering, architectural blueprint approval, or stamped construction calculations. Roof framing specifications depend heavily on localized factors including:
+          </p>
+          <ul style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; padding-left: 1.25rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 6px;">
+            <li>Regional snow loads, wind uplift pressures, and seismic building codes.</li>
+            <li>Lumber species grade, allowable bending stress ($F_b$), and modulus of elasticity ($E$).</li>
+            <li>Rafter spacing, header support, collar tie placement, and ridge beam span tables.</li>
+          </ul>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            <strong>User Responsibility:</strong> Users are solely responsible for physically measuring on-site building spans and verifying cut dimensions with a licensed structural engineer, architect, or local building inspector before cutting lumber or erecting structural roof components.
+          </p>
+        </article>
+
+        <!-- Section 4 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            4. Disclaimer of Warranties & Limitation of Liability
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            THE WEBSITE AND ALL CALCULATIONS, VISUAL SCHEMATICS, AND MATERIAL ESTIMATES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+          </p>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, RAFTER CALCULATOR DISCLAIMS ALL LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LUMBER MATERIAL WASTAGE, FRAMING MISALIGNMENT, CONSTRUCTION DELAYS, OR PROPERTY DAMAGE RESULTING FROM THE USE OF OR INABILITY TO USE THIS WEBSITE.
+          </p>
+        </article>
+
+        <!-- Section 5 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            5. Intellectual Property Rights
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            All custom text, code, graphics, interactive 2D SVG rendering algorithms, and visual branding assets associated with Rafter Calculator are the intellectual property of Raftercalculator.org. You may use the web app for personal, educational, and professional job-site project estimation. You may not scrape, frame, clone, or redistribute the source code for commercial resale without express written permission.
+          </p>
+        </article>
+
+        <!-- Section 6 -->
+        <article class="geist-card" style="padding: 2rem; background: var(--color-canvas-elevated); border: 1px solid var(--color-hairline); border-radius: var(--radius-md);">
+          <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.75rem; letter-spacing: -0.01em;">
+            6. Governing Law & Modifications
+          </h2>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6; margin-bottom: 1rem;">
+            We reserve the right to revise or update these Terms & Conditions at any time without prior notice. The updated version will be reflected by a revised "Effective Date" at the top of this page.
+          </p>
+          <p style="color: var(--color-body); font-size: 0.9375rem; line-height: 1.6;">
+            If you have questions concerning these terms, please visit our <a href="/contact" style="color: var(--color-ink); font-weight: 500;">Contact Us page</a>.
+          </p>
+        </article>
+
+      </div>
+
+      <!-- Bottom Nav Quick Link -->
+      <div style="margin-top: 3rem; text-align: center;">
+        <a href="/" class="geist-btn-secondary geist-btn-md">
+          ← Return to Rafter Calculator
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

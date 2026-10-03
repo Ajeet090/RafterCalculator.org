@@ -1,0 +1,276 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title = "Free Rafter Calculator - Figure Roof Rafter Length & Dimensions",
+  description = "Free online Rafter Calculator to determine rafter length, total rise, roof pitch angle, birdsmouth seat cuts, HAP, overhang, and framing lumber requirements. Calculate rafter span instantly with 2D vector preview.",
+  canonicalUrl = "https://raftercalculator.org/"
+} = Astro.props;
+
+// Supporting Keywords for Metadata
+const metaKeywords = [
+  "Rafter Calculator",
+  "figuring rafters",
+  "rafter length calculator",
+  "determine rafter length",
+  "figure rafter length",
+  "figuring out rafter length",
+  "find rafter length",
+  "rafter calculator length",
+  "rafter dimensions calculator",
+  "rafter length calc",
+  "roof rafter calculator",
+  "figuring roof rafters",
+  "calculate rafter span",
+  "calculating rafter span",
+  "roof rafter length calculator",
+  "length of rafter",
+  "roof truss calculator",
+  "blocklayer rafter calculator",
+  "Rafter calculator free",
+  "metric rafter calculator",
+  "roof pitch calculator",
+  "common rafter length",
+  "roof span and run"
+].join(", ");
+
+// JSON-LD Schemas for Technical SEO
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Rafter Calculator",
+  "url": canonicalUrl,
+  "description": description,
+  "applicationCategory": "ConstructionApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Rafter Calculator",
+    "url": "https://raftercalculator.org"
+  }
+};
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Determine Rafter Length and Birdsmouth Cuts",
+  "description": "Step-by-step instructions for calculating rafter length, total roof rise, overhang, and birdsmouth cuts for roof framing.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Measure Roof Run or Span",
+      "text": "Measure the horizontal roof span or half-run in feet, inches, centimeters, or meters using the Rafter Calculator."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Select Roof Pitch Ratio or Angle",
+      "text": "Enter the slope pitch (e.g. 6/12) or pitch angle in degrees (e.g. 26.57°) of the roof incline."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Calculate Base Rafter Length",
+      "text": "Use the Pythagorean hypotenuse formula (Rafter Length = √(Run² + Rise²)) to figure out rafter length."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Apply Ridge Deduction & Overhang Addition",
+      "text": "Deduct half of the center ridge beam thickness from the run, then add the diagonal overhang length."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Mark Birdsmouth Cut & Plumb Angles",
+      "text": "Determine the seat cut width (equal to wall plate width) and plumb cut depth to verify Height Above Plate (HAP)."
+    }
+  ]
+};
+
+// 13 Synchronized FAQ Questions & Answers matching visible page HTML
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the Rafter Calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Rafter Calculator is a free web-based construction tool designed to help carpenters, roofers, builders, and DIYers determine accurate rafter lengths, roof pitch angles, birdsmouth cut dimensions, and material requirements directly in their web browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you calculate rafter length with a calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To calculate rafter length with a calculator, measure your roof's effective horizontal run and vertical rise, then apply the right-triangle Pythagorean formula: Rafter Length = √(Run² + Rise²). You then adjust the result for half the ridge board thickness and add any desired eave overhang."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you work out rafter length using a Rafter Calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Working out rafter length using our Rafter Calculator is simple: enter your total roof span or half run, select your roof pitch ratio or slope angle in degrees, and input your overhang distance. The tool automatically computes the exact rafter length, total rise, plumb cut angle, and seat cut width in real time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does a Rafter Calculator work with a diagram?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our Rafter Calculator features an interactive 2D vector schematic canvas that updates dynamically as you change your inputs. The visual diagram illustrates the angled rafter board, ridge beam intersection, wall plate, birdsmouth notch, and overhang with clear dimension callout lines, allowing you to visually verify all cuts before making your first saw mark."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free Rafter Calculator app?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Raftercalculator.org is a completely free web application accessible on any desktop, tablet, or smartphone without registration, subscriptions, or app store installation required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the Rafter Calculator support metric measurements?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the Rafter Calculator provides full support for metric measurements including Centimeters (cm) and Meters (m), as well as Imperial Inches (in) and Feet-Inches (ft-in). Changing the unit selector automatically updates all input fields, labels, and output specifications."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use this Rafter Calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To use this Rafter Calculator, select your preferred measurement unit, choose whether you are entering Total Roof Span or Half Run, enter your horizontal distance, select your roof pitch, and specify your eave overhang. Use the advanced settings to fine-tune ridge board thickness, wall plate width, and rafter lumber depth."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use a Rafter Calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You should use a Rafter Calculator during the planning, estimation, and cutting phases of any roof framing project. It is ideal for estimating lumber quantities, preparing job-site cut lists, verifying birdsmouth notch depths, and checking slope angles for sheds, garages, home additions, and residential roofs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between \"Span\" and \"Run\"?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Total Roof Span is the horizontal distance between the outside edges of opposite exterior wall plates. Roof Run is the horizontal distance a single rafter covers from the wall plate to the center of the building, equal to half the total span minus half the thickness of the ridge board."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you calculate the standard length of a common rafter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The standard length of a common rafter from the ridge plumb cut line to the wall plate plumb cut line is calculated using Rafter Length = √(Run² + Rise²), where Run is half span minus half ridge thickness, and Rise is Run multiplied by the pitch ratio. Eave overhang is added separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does a \"6/12 roof pitch\" mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 6/12 roof pitch means the roof rises 6 units vertically for every 12 units of horizontal run. This represents a 50% slope grade with a pitch angle of 26.57 degrees, which is one of the most common standard roof slopes in residential construction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the ridge board affect the rafter calculation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The ridge board runs horizontally along the peak where opposing rafters meet. Because rafters abut the ridge board rather than each other, half of the actual ridge board thickness (e.g., 0.75 inches for a nominal 1.5-inch 2x ridge board) must be subtracted from the total building run before calculating rafter length."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a Rafter Calculator app available for free download?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This Rafter Calculator runs directly in your web browser as a responsive progressive web application, eliminating the need to download or install software from an app store. You can bookmark or save the page to your mobile home screen for instant offline-ready access on the job site."
+      }
+    }
+  ]
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": canonicalUrl
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Rafter Calculator",
+      "item": canonicalUrl
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+		<meta name="keywords" content={metaKeywords} />
+		<meta name="author" content="Rafter Calculator" />
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+		<!-- Open Graph / Facebook Meta Tags -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:site_name" content="Rafter Calculator" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={canonicalUrl} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+		<!-- Structured Data (JSON-LD) -->
+		<script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

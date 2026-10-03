@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import RafterCalculator from '../components/RafterCalculator.astro';
+import MaterialEstimator from '../components/MaterialEstimator.astro';
+import EducationalGuide from '../components/EducationalGuide.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout 
+  title="Rafter Calculator - Free Roof Rafter Length & Framing Dimension Calculator"
+  description="Free interactive rafter calculator to figure rafter length, total rise, roof pitch angle, birdsmouth cut, HAP, overhang, and lumber framing takeoff. Real-time 2D vector schematic preview."
+>
+  <Header />
+
+  <main>
+    <!-- Hero Mesh Gradient Section & Main Calculator App -->
+    <div class="hero-mesh-bg">
+      <div class="hero-content">
+        <RafterCalculator />
+      </div>
+    </div>
+
+    <!-- Material Framing Estimator -->
+    <MaterialEstimator />
+
+    <!-- Technical Educational Guide & FAQs -->
+    <EducationalGuide />
+  </main>
+
+  <Footer />
+</Layout>
