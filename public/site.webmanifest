@@ -1,0 +1,17 @@
+{
+  "name": "Rafter Calculator",
+  "short_name": "RafterCalc",
+  "description": "Free roof rafter length, pitch, rise, birdsmouth, and framing takeoff calculator.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

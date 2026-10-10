@@ -62,6 +62,24 @@ const webAppSchema = {
   }
 };
 
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Rafter Calculator",
+  "url": canonicalUrl,
+  "description": description,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://raftercalculator.org/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Rafter Calculator",
+    "url": "https://raftercalculator.org"
+  }
+};
+
 const howToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
@@ -234,6 +252,7 @@ const breadcrumbSchema = {
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<link rel="canonical" href={canonicalUrl} />
 		<meta name="generator" content={Astro.generator} />
 
@@ -252,29 +271,45 @@ const breadcrumbSchema = {
 		<meta property="og:description" content={description} />
 		<meta property="og:site_name" content="Rafter Calculator" />
 		<meta property="og:locale" content="en_US" />
+		<meta property="og:image" content="https://raftercalculator.org/og-image.svg" />
+		<meta property="og:image:alt" content="Rafter Calculator roof framing tool preview" />
+		<meta name="theme-color" content="#111827" />
 
 		<!-- Twitter Meta Tags -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:url" content={canonicalUrl} />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-
-		<!-- Google Fonts (Non-Render-Blocking Asynchronous Loading) -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-		<noscript>
-			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-		</noscript>
+		<meta name="twitter:image" content="https://raftercalculator.org/og-image.svg" />
+		<meta name="twitter:image:alt" content="Rafter Calculator roof framing tool preview" />
 
 		<!-- Structured Data (JSON-LD) -->
+		<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 		<script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
 		<script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
 		<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 		<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+		<style>
+			.skip-link {
+				position: absolute;
+				left: 1rem;
+				top: -3rem;
+				z-index: 1000;
+				padding: 0.75rem 1rem;
+				background: #111827;
+				color: #ffffff;
+				border-radius: 0.5rem;
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.skip-link:focus {
+				top: 1rem;
+			}
+		</style>
 	</head>
 	<body>
+		<a class="skip-link" href="#main-content">Skip to content</a>
 		<slot />
 	</body>
 </html>

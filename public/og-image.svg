@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Rafter Calculator</title>
+  <desc id="desc">Roof framing calculator preview with roof profile illustration.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#374151"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="72" y="60" width="1056" height="510" rx="28" fill="#ffffff" stroke="#dbe1ea"/>
+  <g opacity="0.95">
+    <path d="M170 410 L530 410 L750 250 L1040 250" fill="none" stroke="#111827" stroke-width="14" stroke-linecap="round"/>
+    <path d="M170 410 L170 150" fill="none" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+    <path d="M530 410 L750 250" fill="none" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+    <path d="M530 410 L530 180" fill="none" stroke="#a1a1aa" stroke-width="4" stroke-dasharray="10 10"/>
+    <path d="M750 250 L1040 250" fill="none" stroke="#a1a1aa" stroke-width="4" stroke-dasharray="10 10"/>
+    <path d="M170 150 L530 150" fill="none" stroke="#d1d5db" stroke-width="4" stroke-dasharray="8 12"/>
+  </g>
+  <g>
+    <rect x="152" y="142" width="160" height="58" rx="12" fill="url(#accent)"/>
+    <text x="185" y="178" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28">Rafter</text>
+    <text x="185" y="238" fill="#111827" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="700">Calculator</text>
+    <text x="185" y="290" fill="#4b5563" font-family="Arial, Helvetica, sans-serif" font-size="26">Roof rafter length, rise, pitch, cut layout</text>
+    <text x="185" y="336" fill="#4b5563" font-family="Arial, Helvetica, sans-serif" font-size="22">and framing takeoff tools</text>
+  </g>
+  <g>
+    <rect x="790" y="122" width="248" height="104" rx="18" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="818" y="168" fill="#111827" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">6:12 Pitch</text>
+    <text x="818" y="202" fill="#4b5563" font-family="Arial, Helvetica, sans-serif" font-size="18">26.57° roof angle</text>
+  </g>
+  <g>
+    <rect x="790" y="268" width="248" height="104" rx="18" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="818" y="314" fill="#111827" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Rafter Length</text>
+    <text x="818" y="348" fill="#4b5563" font-family="Arial, Helvetica, sans-serif" font-size="18">Computed live</text>
+  </g>
+</svg>

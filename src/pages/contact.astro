@@ -101,7 +101,7 @@ const canonicalUrl = "https://raftercalculator.org/contact";
           </p>
 
           <!-- Form Container -->
-          <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px;">
+          <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px;" action="mailto:support@raftercalculator.org" method="post" enctype="text/plain">
             
             <!-- Name Input -->
             <div>
@@ -228,7 +228,19 @@ const canonicalUrl = "https://raftercalculator.org/contact";
       if (form && successToast) {
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          // Client-side confirmation feedback without SSR/backend overhead
+
+          const name = form.querySelector('#contact-name')?.value?.trim() || 'Customer';
+          const email = form.querySelector('#contact-email')?.value?.trim() || 'noreply@example.com';
+          const category = form.querySelector('#contact-category')?.value || 'General Inquiry';
+          const subject = form.querySelector('#contact-subject')?.value?.trim() || 'Website inquiry';
+          const message = form.querySelector('#contact-message')?.value?.trim() || '';
+
+          const safeSubject = encodeURIComponent(`${category}: ${subject}`);
+          const safeBody = encodeURIComponent(
+            `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+          );
+
+          window.location.href = `mailto:support@raftercalculator.org?subject=${safeSubject}&body=${safeBody}`;
           form.style.display = 'none';
           successToast.style.display = 'block';
         });
